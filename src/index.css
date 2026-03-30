@@ -1,4 +1,4 @@
-/* src/index.css - Complete Enhanced CSS */
+/* src/index.css - Complete Enhanced CSS with Cross-Browser Support */
 * {
   margin: 0;
   padding: 0;
@@ -7,6 +7,20 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+/* Safari and iOS compatibility for smooth scroll */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Fallback for older Safari */
+@media not all and (min-resolution: 0.001dpcm) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 body {
@@ -18,24 +32,26 @@ body {
   color: #1f2937;
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
+/* Custom Scrollbar - WebKit only with fallback */
+@media (hover: hover) {
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
 
-::-webkit-scrollbar-track {
-  background: #fef3c7;
-  border-radius: 10px;
-}
+  ::-webkit-scrollbar-track {
+    background: #fef3c7;
+    border-radius: 10px;
+  }
 
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #d97706, #b45309);
-  border-radius: 10px;
-}
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #d97706, #b45309);
+    border-radius: 10px;
+  }
 
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #b45309, #92400e);
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #b45309, #92400e);
+  }
 }
 
 /* Animation Keyframes */
@@ -150,8 +166,13 @@ body {
   border-radius: 9999px;
   font-size: 0.875rem;
   display: inline-block;
-  backdrop-filter: blur(10px);
   transition: all 0.3s ease;
+}
+
+/* Safari compatibility for backdrop-filter */
+.badge {
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 
 .badge:hover {
@@ -163,10 +184,7 @@ body {
 /* Info Bar */
 .info-bar {
   background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  position: sticky;
-  top: 0;
   padding: 0.75rem 1rem;
   display: flex;
   flex-wrap: wrap;
@@ -174,6 +192,19 @@ body {
   gap: 1rem;
   z-index: 1000;
   transition: all 0.3s ease;
+}
+
+/* Safari compatibility for sticky */
+.info-bar {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
+
+/* Safari compatibility for backdrop-filter */
+.info-bar {
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 
 @media (min-width: 768px) {
@@ -217,9 +248,14 @@ body {
   border-bottom: 2px solid #fcd34d;
   margin-bottom: 2rem;
   background: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(5px);
   border-radius: 1rem 1rem 0 0;
   padding: 0.5rem;
+}
+
+/* Safari compatibility for backdrop-filter */
+.tabs {
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
 }
 
 .tab-btn {
@@ -479,8 +515,13 @@ body {
   border-radius: 9999px;
   font-size: 0.75rem;
   font-weight: bold;
-  backdrop-filter: blur(5px);
   z-index: 1;
+}
+
+/* Safari compatibility for backdrop-filter */
+.gallery-card-badge {
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
 }
 
 /* Stars */
@@ -565,6 +606,7 @@ body {
   color: #fed7aa;
   text-decoration: none;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .footer-links a:hover {
@@ -838,6 +880,15 @@ body {
 
 .hover-lift:hover {
   transform: translateY(-5px);
+}
+
+/* Animation Classes */
+.animate-fadeInUp {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
 }
 
 /* Responsive Design */

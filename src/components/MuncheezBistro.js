@@ -1,5 +1,5 @@
 // src/components/MuncheezBistro.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 const MuncheezBistro = () => {
   const [activeTab, setActiveTab] = useState('menu');
@@ -13,7 +13,31 @@ const MuncheezBistro = () => {
   useEffect(() => {
     // Simulate loading
     setTimeout(() => setIsLoading(false), 1000);
-    
+  }, []);
+
+  // Define navigation functions with useCallback to avoid recreation
+  const nextImage = useCallback(() => {
+    if (selectedGalleryItem) {
+      setCurrentImageIndex((prev) => 
+        prev === selectedGalleryItem.images.length - 1 ? 0 : prev + 1
+      );
+    }
+  }, [selectedGalleryItem]);
+
+  const prevImage = useCallback(() => {
+    if (selectedGalleryItem) {
+      setCurrentImageIndex((prev) => 
+        prev === 0 ? selectedGalleryItem.images.length - 1 : prev - 1
+      );
+    }
+  }, [selectedGalleryItem]);
+
+  const closeGalleryModal = useCallback(() => {
+    setSelectedGalleryItem(null);
+    setCurrentImageIndex(0);
+  }, []);
+
+  useEffect(() => {
     // Add keyboard navigation for gallery modal
     const handleKeyDown = (e) => {
       if (selectedGalleryItem) {
@@ -29,7 +53,7 @@ const MuncheezBistro = () => {
     
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedGalleryItem]);
+  }, [selectedGalleryItem, prevImage, nextImage, closeGalleryModal]);
 
   // ============= COMPLETE MENU =============
   const menuCategories = [
@@ -281,27 +305,6 @@ const MuncheezBistro = () => {
     setCurrentImageIndex(index);
   };
 
-  const closeGalleryModal = () => {
-    setSelectedGalleryItem(null);
-    setCurrentImageIndex(0);
-  };
-
-  const nextImage = () => {
-    if (selectedGalleryItem) {
-      setCurrentImageIndex((prev) => 
-        prev === selectedGalleryItem.images.length - 1 ? 0 : prev + 1
-      );
-    }
-  };
-
-  const prevImage = () => {
-    if (selectedGalleryItem) {
-      setCurrentImageIndex((prev) => 
-        prev === 0 ? selectedGalleryItem.images.length - 1 : prev - 1
-      );
-    }
-  };
-
   const showToastMessage = (message, type = 'info') => {
     setToastMessage(message);
     setShowToast(true);
@@ -310,6 +313,11 @@ const MuncheezBistro = () => {
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    scrollToTop();
   };
 
   if (isLoading) {
@@ -366,31 +374,31 @@ const MuncheezBistro = () => {
       <div className="container">
         <div className="tabs">
           <button
-            onClick={() => setActiveTab('menu')}
+            onClick={() => handleTabChange('menu')}
             className={`tab-btn ${activeTab === 'menu' ? 'active' : ''}`}
           >
             🍽️ Menu
           </button>
           <button
-            onClick={() => setActiveTab('gallery')}
+            onClick={() => handleTabChange('gallery')}
             className={`tab-btn ${activeTab === 'gallery' ? 'active' : ''}`}
           >
             📸 Gallery ({bistroGallery.length} Albums)
           </button>
           <button
-            onClick={() => setActiveTab('offers')}
+            onClick={() => handleTabChange('offers')}
             className={`tab-btn ${activeTab === 'offers' ? 'active' : ''}`}
           >
             🎁 Special Offers
           </button>
           <button
-            onClick={() => setActiveTab('reviews')}
+            onClick={() => handleTabChange('reviews')}
             className={`tab-btn ${activeTab === 'reviews' ? 'active' : ''}`}
           >
             💬 Reviews
           </button>
           <button
-            onClick={() => setActiveTab('info')}
+            onClick={() => handleTabChange('info')}
             className={`tab-btn ${activeTab === 'info' ? 'active' : ''}`}
           >
             ℹ️ Info
@@ -686,11 +694,21 @@ const MuncheezBistro = () => {
           <h3>Muncheez Bistro</h3>
           <p>Good Food, Good Vibes</p>
           <div className="footer-links">
-            <a href="#" onClick={() => setActiveTab('menu')}>Menu</a>
-            <a href="#" onClick={() => setActiveTab('gallery')}>Gallery</a>
-            <a href="#" onClick={() => setActiveTab('offers')}>Offers</a>
-            <a href="#" onClick={() => setActiveTab('reviews')}>Reviews</a>
-            <a href="#" onClick={() => setActiveTab('info')}>Info</a>
+            <button onClick={() => handleTabChange('menu')} className="hover:text-white transition">
+              Menu
+            </button>
+            <button onClick={() => handleTabChange('gallery')} className="hover:text-white transition">
+              Gallery
+            </button>
+            <button onClick={() => handleTabChange('offers')} className="hover:text-white transition">
+              Offers
+            </button>
+            <button onClick={() => handleTabChange('reviews')} className="hover:text-white transition">
+              Reviews
+            </button>
+            <button onClick={() => handleTabChange('info')} className="hover:text-white transition">
+              Info
+            </button>
           </div>
           <div className="flex flex-wrap justify-center gap-4 text-sm">
             <span>📞 0726 592499</span>

@@ -2,6 +2,7 @@
   "name": "muncheez-bistro",
   "version": "1.0.0",
   "private": true,
+  "homepage": "https://muncheez-bistro.netlify.app",
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -11,7 +12,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "netlify deploy --prod"
   },
   "eslintConfig": {
     "extends": [
